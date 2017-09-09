@@ -14,6 +14,7 @@ import ca.qc.cgmatane.informatique.applicationtodo.modele.todo;
 
 import static ca.qc.cgmatane.informatique.applicationtodo.VueApplicationTODO.adapteurVueListeTODO;
 import static ca.qc.cgmatane.informatique.applicationtodo.donnees.todoDAO.listeTODO;
+import ca.qc.cgmatane.informatique.applicationtodo.donnees.BaseDeDonnees;
 /**
  * Created by max77 on 06/09/2017.
  */
@@ -25,6 +26,7 @@ public class VueAjouterTODO extends AppCompatActivity implements View.OnClickLis
     EditText champHeure;
     EditText champDescription;
     EditText champURL;
+    private BaseDeDonnees accesseurBaseDeDonnees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

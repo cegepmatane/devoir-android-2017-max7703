@@ -12,9 +12,11 @@ import android.widget.SimpleAdapter;
 import java.util.HashMap;
 import java.util.List;
 
+import ca.qc.cgmatane.informatique.applicationtodo.donnees.BaseDeDonnees;
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.todoDAO;
 
 public class VueApplicationTODO extends AppCompatActivity implements View.OnClickListener {
+
     protected todoDAO accesseurTODO;
     static SimpleAdapter adapteurVueListeTODO;
     protected List<HashMap<String, String>> listeTODO;
@@ -42,6 +44,8 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
         buttonAdd.setOnClickListener(this);
 
         vueListeTODO = (ListView)findViewById(R.id.vue_liste_todo);
+
+        BaseDeDonnees.getInstance(getApplicationContext());
         accesseurTODO = todoDAO.getInstance();
         listeTODO = accesseurTODO.listerLesTODOEnHashmap();
 

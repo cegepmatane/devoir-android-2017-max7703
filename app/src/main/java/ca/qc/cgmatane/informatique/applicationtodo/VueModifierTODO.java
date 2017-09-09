@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.todoDAO;
 import ca.qc.cgmatane.informatique.applicationtodo.modele.todo;
+import ca.qc.cgmatane.informatique.applicationtodo.donnees.BaseDeDonnees;
 
 /**
  * Created by max77 on 06/09/2017.
@@ -23,6 +24,7 @@ public class VueModifierTODO extends AppCompatActivity implements View.OnClickLi
     EditText champDescription;
     EditText champURL;
     Button buttonModify;
+    private BaseDeDonnees accesseurBaseDeDonnees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
