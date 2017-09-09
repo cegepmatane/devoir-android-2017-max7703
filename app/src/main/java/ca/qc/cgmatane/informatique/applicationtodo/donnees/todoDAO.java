@@ -13,7 +13,7 @@ import ca.qc.cgmatane.informatique.applicationtodo.modele.todo;
 public class todoDAO {
     private static todoDAO instance = null;
 
-    protected List<todo> listeTODO;
+    public static List<todo> listeTODO;
 
     public static todoDAO getInstance() {
         if(null == instance){
@@ -28,13 +28,13 @@ public class todoDAO {
         listeTODO = new ArrayList<todo>();
 
         todo todo;
-        todo = new todo(1, "One Piece", "Eiichirō Oda", "Test Heure", "Test Description", "Test URL");
+        todo = new todo(1, "Regarder une video", "Demain", "8h", "Le Java", "www.youtube.com");
         listeTODO.add(todo);
-        todo = new todo(2, "Naruto", "Masashi Kishimoto", "Test Heure", "Test Description", "Test URL");
+        todo = new todo(2, "Faire la lessive", "Aujourd'hui", "16h", "Laver son linge", "N/A");
         listeTODO.add(todo);
-        todo = new todo(3, "Harry Potter", "J.K. Rowling", "Test Heure", "Test Description", "Test URL");
+        todo = new todo(3, "Lire un livre", "Demain", "12h", "Maria Chapdelaine", "N/A");
         listeTODO.add(todo);
-        todo = new todo(4, "The Hobbit", "Tolkien", "Test Heure", "Test Description", "Test URL");
+        todo = new todo(4, "Aller à la fête", "Aujourd'hui", "21h", "Party de Nico", "N/A");
         listeTODO.add(todo);
         todo = new todo(5, "Test Titre 5", "Test date de realisation 5", "Test Heure", "Test Description", "Test URL");
         listeTODO.add(todo);
