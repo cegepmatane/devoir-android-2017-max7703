@@ -46,16 +46,25 @@ public class todoDAO {
         listeTODO.add(todo);*/
     }
     public void modifierTODO(todo todo){
+
         for(todo TODOTeste : this.listeTODO){
 
             if(TODOTeste.getId() == todo.getId()) {
+                String UPDATE_TODO = "UPDATE todo SET titre = '" + todo.getTitre() +
+                        "', date_de_realisation = '" + todo.getDaterealisation() +
+                        "', heure = '" + todo.getHeure() +
+                        "', description = '" + todo.getDescription() +
+                        "', url = '" + todo.getUrl() +
+                        "' WHERE " + todo.getId() + " = id_todo";
+                Log.d("UPDATE", UPDATE_TODO);
 
-                TODOTeste.setUrl(todo.getUrl());
+                accesseurBaseDeDonnees.getWritableDatabase().execSQL(UPDATE_TODO);
+
+                /*TODOTeste.setUrl(todo.getUrl());
                 TODOTeste.setDescription(todo.getDescription());
                 TODOTeste.setHeure(todo.getHeure());
                 TODOTeste.setDaterealisation(todo.getDaterealisation());
-                TODOTeste.setTitre(todo.getTitre());
-                return;
+                TODOTeste.setTitre(todo.getTitre());*/
             }
         }
     }

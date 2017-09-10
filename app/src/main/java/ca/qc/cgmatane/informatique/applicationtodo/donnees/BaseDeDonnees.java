@@ -47,7 +47,7 @@ public class BaseDeDonnees extends SQLiteOpenHelper {
         String INSERT_2 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('2','Faire la lessive', 'Aujourdhui', '16h', 'Laver son linge', 'N/A')";
         String INSERT_3 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('3','Lire un livre', 'Demain', '12h', 'Maria Chapdelaine', 'N/A')";
         String INSERT_4 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('4','Aller à la fête', 'Aujourdhui', '21h', 'Party de Nico', 'N/A')";
-        String INSERT_5 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('5','Test Titre 5', 'Test date de realisation 5', '8h', 'Test Heure', 'Test URL')";
+        String INSERT_5 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('5','Test Titre 5', 'Test date de realisation 5', 'Test Heure', 'Test description', 'Test URL')";
 
         db.execSQL(INSERT_1);
         db.execSQL(INSERT_2);
