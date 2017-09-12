@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.todoDAO;
 import ca.qc.cgmatane.informatique.applicationtodo.modele.todo;
-import ca.qc.cgmatane.informatique.applicationtodo.donnees.BaseDeDonnees;
 
 /**
  * Created by max77 on 06/09/2017.
@@ -24,7 +23,6 @@ public class VueModifierTODO extends AppCompatActivity implements View.OnClickLi
     EditText champDescription;
     EditText champURL;
     Button buttonModify;
-    private BaseDeDonnees accesseurBaseDeDonnees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +32,6 @@ public class VueModifierTODO extends AppCompatActivity implements View.OnClickLi
         Bundle parametres = this.getIntent().getExtras();
         String parametre_id_todo = (String) parametres.get("id_todo");
         int id_todo = Integer.parseInt(parametre_id_todo);
-
-        /*Toast test = Toast.makeText(getApplicationContext(),
-                "Valeur reçue " + id_todo,
-                Toast.LENGTH_LONG);
-        test.show();*/
 
         todo = accesseurTODO.trouverTODO(id_todo);
         champTitre = (EditText)findViewById(R.id.champ_titre_modifier_todo);

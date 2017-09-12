@@ -45,6 +45,24 @@ public class todoDAO {
         todo = new todo(5, "Test Titre 5", "Test date de realisation 5", "Test Heure", "Test Description", "Test URL");
         listeTODO.add(todo);*/
     }
+    public void ajouterTODO(todo todo)
+    {
+        String INSERT_DATA = "INSERT INTO todo(titre, date_de_realisation, heure, " +
+                "description, url, fini) VALUES('" + todo.getTitre() +
+                "', '" + todo.getDaterealisation() + "', " +
+                "'" + todo.getHeure() + "', " +
+                "'" + todo.getDescription() + "', " +
+                "'" + todo.getUrl() + "', '0')";
+
+        Log.d("INSERT", INSERT_DATA);
+        accesseurBaseDeDonnees.getWritableDatabase().execSQL(INSERT_DATA);
+    }
+    public void todoTermine(String id)
+    {
+        String TODO_FINI = "UPDATE todo SET fini = '1' WHERE id_todo = '" + id + "'";
+        accesseurBaseDeDonnees.getWritableDatabase().execSQL(TODO_FINI);
+        Log.d("TODO FINI", TODO_FINI);
+    }
     public void modifierTODO(todo todo){
 
         for(todo TODOTeste : this.listeTODO){
@@ -88,7 +106,7 @@ public class todoDAO {
     }
 
     public List<todo> listerLesTODO(){
-        String LISTER_TODO = "SELECT * FROM todo";
+        String LISTER_TODO = "SELECT * FROM todo WHERE fini = '0'";
         Cursor curseur = accesseurBaseDeDonnees.getReadableDatabase().rawQuery(LISTER_TODO, null);
 
         this.listeTODO.clear();

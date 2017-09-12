@@ -25,7 +25,8 @@ public class BaseDeDonnees extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS todo(id_todo INTEGER PRIMARY KEY, titre TEXT, date_de_realisation TEXT, heure TEXT, description TEXT, url TEXT)";
+        String CREATE_TABLE = "CREATE TABLE todo(id_todo INTEGER PRIMARY KEY, titre TEXT, " +
+                "date_de_realisation TEXT, heure TEXT, description TEXT, url TEXT, fini TINYINT)";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -33,7 +34,8 @@ public class BaseDeDonnees extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
         //String DELETE = "delete from livre where 1 = 1";
         //db.execSQL(DELETE);
-        String CREER_TABLE = "CREATE TABLE IF NOT EXISTS todo(id_todo INTEGER PRIMARY KEY, titre TEXT, date_de_realisation TEXT, heure TEXT, description TEXT, url TEXT)";
+        String CREER_TABLE = "CREATE TABLE todo(id_todo INTEGER PRIMARY KEY, titre TEXT, " +
+                "date_de_realisation TEXT, heure TEXT, description TEXT, url TEXT, fini TINYINT)";
         db.execSQL(CREER_TABLE);
     }
 
@@ -43,11 +45,16 @@ public class BaseDeDonnees extends SQLiteOpenHelper {
         String DELETE = "delete from todo where 1 = 1";
         db.execSQL(DELETE);
 
-        String INSERT_1 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('1','Regarder une video', 'Demain', '8h', 'Le Java', 'www.youtube.com')";
-        String INSERT_2 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('2','Faire la lessive', 'Aujourdhui', '16h', 'Laver son linge', 'N/A')";
-        String INSERT_3 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('3','Lire un livre', 'Demain', '12h', 'Maria Chapdelaine', 'N/A')";
-        String INSERT_4 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('4','Aller à la fête', 'Aujourdhui', '21h', 'Party de Nico', 'N/A')";
-        String INSERT_5 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, url) VALUES('5','Test Titre 5', 'Test date de realisation 5', 'Test Heure', 'Test description', 'Test URL')";
+        String INSERT_1 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
+                "url, fini) VALUES('1','Regarder une video', 'Demain', '8h', 'Le Java', 'www.youtube.com', '0')";
+        String INSERT_2 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
+                "url, fini) VALUES('2','Faire la lessive', 'Aujourdhui', '16h', 'Laver son linge', 'N/A', '0')";
+        String INSERT_3 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
+                "url, fini) VALUES('3','Lire un livre', 'Demain', '12h', 'Maria Chapdelaine', 'N/A', '0')";
+        String INSERT_4 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
+                "url, fini) VALUES('4','Aller à la fête', 'Aujourdhui', '21h', 'Party de Nico', 'N/A', '0')";
+        String INSERT_5 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
+                "url, fini) VALUES('5','Test Titre 5', 'Test date de realisation 5', 'Test Heure', 'Test description', 'Test URL', '0')";
 
         db.execSQL(INSERT_1);
         db.execSQL(INSERT_2);

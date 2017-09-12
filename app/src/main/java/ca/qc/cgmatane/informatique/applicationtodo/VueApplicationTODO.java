@@ -2,8 +2,11 @@ package ca.qc.cgmatane.informatique.applicationtodo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,6 +18,7 @@ import java.util.List;
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.BaseDeDonnees;
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.todoDAO;
 
+
 public class VueApplicationTODO extends AppCompatActivity implements View.OnClickListener {
 
     protected todoDAO accesseurTODO;
@@ -23,6 +27,8 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
     protected ListView vueListeTODO;
     static final int ACTIVITY_MODIFIER_TODO = 1;
     static final int ACTIVITY_AJOUTER_TODO = 2;
+    private BaseDeDonnees accesseurBaseDeDonnees;
+    Intent intentionNaviguerModifierTODO;
 
     Button buttonAdd;
 
@@ -34,6 +40,7 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
         startActivityForResult(intentionNaviguerAjouterTODO, ACTIVITY_AJOUTER_TODO);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,27 +51,17 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
         buttonAdd.setOnClickListener(this);
 
         vueListeTODO = (ListView)findViewById(R.id.vue_liste_todo);
-
+        vueListeTODO.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         BaseDeDonnees.getInstance(getApplicationContext());
+        this.accesseurBaseDeDonnees = BaseDeDonnees.getInstance();
         accesseurTODO = todoDAO.getInstance();
         listeTODO = accesseurTODO.listerLesTODOEnHashmap();
-
-        /*SimpleAdapter adapteurVueListeTODO = new SimpleAdapter(
-                this,
-                listeTODO,
-                android.R.layout.two_line_list_item,
-                new String[] {"titre", "daterealisation"},
-                new int[] {android.R.id.text1, android.R.id.text2});
-
-        vueListeTODO.setAdapter(adapteurVueListeTODO);*/
 
         vueListeTODO.setOnItemClickListener(
                 new AdapterView.OnItemClickListener(){
                     @Override
-                    public void onItemClick
-                            (AdapterView<?> parent, View vue, int positionDansAdapteur,
-                             long positionItem){
-
+                    public void onItemClick(AdapterView<?> parent, View vue, int positionDansAdapteur, long positionItem)
+                    {
                         ListView vueListeTODO = (ListView)vue.getParent();
 
                         @SuppressWarnings("unchecked")
@@ -72,11 +69,27 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
                                 (HashMap<String, String>)
                                         vueListeTODO.getItemAtPosition((int)positionItem);
 
-                        Intent intentionNaviguerModifierTODO = new Intent(
+                        intentionNaviguerModifierTODO = new Intent(
                                 VueApplicationTODO.this, VueModifierTODO.class
                         );
                         intentionNaviguerModifierTODO.putExtra("id_todo", todo.get("id_todo"));
-                        startActivityForResult(intentionNaviguerModifierTODO, ACTIVITY_MODIFIER_TODO);
+
+                        SparseBooleanArray checked = vueListeTODO.getCheckedItemPositions();
+
+                        for (int i = 0; i < adapteurVueListeTODO.getCount(); i++) {
+                            if (checked.get(i))
+                            {
+                                accesseurTODO.todoTermine(todo.get("id_todo"));
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        // Actions to do after 3 seconds
+                                        afficherTousLesTodo();
+                                    }
+                                }, 2000);
+                            }
+                        }
+                        //startActivityForResult(intentionNaviguerModifierTODO, ACTIVITY_MODIFIER_TODO);
                     }}
         );
         afficherTousLesTodo();
@@ -95,15 +108,15 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
     }
     private void afficherTousLesTodo() {
         listeTODO = accesseurTODO.listerLesTODOEnHashmap();
-
         adapteurVueListeTODO = new SimpleAdapter(
                 this,
                 listeTODO,
-                android.R.layout.two_line_list_item,
-                new String[] {"titre", "daterealisation"},
-                new int[] {android.R.id.text1, android.R.id.text2});
+                android.R.layout.simple_list_item_single_choice,
+                new String[] {"titre"},
+                new int[] {android.R.id.text1});
 
         vueListeTODO.setAdapter(adapteurVueListeTODO);
+
     }
 
 }
