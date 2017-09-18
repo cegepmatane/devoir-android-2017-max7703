@@ -2,6 +2,7 @@ package ca.qc.cgmatane.informatique.applicationtodo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AbsListView;
@@ -16,18 +17,18 @@ import java.util.List;
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.BaseDeDonnees;
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.todoDAO;
 
-
 public class VueApplicationTODO extends AppCompatActivity implements View.OnClickListener {
 
     public static final int ACTIVITY_ALARM_TODO = 3;
     protected todoDAO accesseurTODO;
-    static SimpleAdapter adapteurVueListeTODO;
+    public static SimpleAdapter adapteurVueListeTODO;
     protected List<HashMap<String, String>> listeTODO;
     protected ListView vueListeTODO;
     static final int ACTIVITY_MODIFIER_TODO = 1;
     static final int ACTIVITY_AJOUTER_TODO = 2;
     private BaseDeDonnees accesseurBaseDeDonnees;
     Intent intentionNaviguerModifierTODO;
+    private final Handler handler = new Handler();
 
     Button buttonAdd;
 
@@ -78,7 +79,7 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
                         startActivityForResult(intentionNaviguerModifierTODO, ACTIVITY_MODIFIER_TODO);
                     }}
         );
-        afficherTousLesTodo();
+        AutoRefresh();
     }
     protected void onActivityResult(int activite, int resultat, Intent donnees){
         switch(activite){
@@ -90,6 +91,25 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
                 break;
         }
     }
+    private void AutoRefresh() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                afficherTousLesTodo();
+                AutoRefresh();
+            }
+        }, 1000);
+    }
+    /*@Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_B:
+                afficherTousLesTodo();
+                Log.d("Button B", "Pressed");
+                return true;
+        }
+        return false;
+    }*/
      void afficherTousLesTodo() {
         listeTODO = accesseurTODO.listerLesTODOEnHashmap();
         String[] values = new String[] { "titre", "daterealisation", "heure"};
@@ -102,5 +122,4 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
 
         vueListeTODO.setAdapter(adapteurVueListeTODO);
     }
-
 }
