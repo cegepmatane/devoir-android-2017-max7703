@@ -79,6 +79,7 @@ public class VueApplicationTODO extends AppCompatActivity implements View.OnClic
                         startActivityForResult(intentionNaviguerModifierTODO, ACTIVITY_MODIFIER_TODO);
                     }}
         );
+        afficherTousLesTodo();
         AutoRefresh();
     }
     protected void onActivityResult(int activite, int resultat, Intent donnees){
