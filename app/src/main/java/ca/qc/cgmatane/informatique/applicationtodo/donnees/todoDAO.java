@@ -1,12 +1,19 @@
 package ca.qc.cgmatane.informatique.applicationtodo.donnees;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import ca.qc.cgmatane.informatique.applicationtodo.VueAlarme;
 import ca.qc.cgmatane.informatique.applicationtodo.modele.todo;
 
 /**
@@ -16,6 +23,7 @@ import ca.qc.cgmatane.informatique.applicationtodo.modele.todo;
 public class todoDAO {
     private static todoDAO instance = null;
     private BaseDeDonnees accesseurBaseDeDonnees;
+    private Context context;
 
     public static List<todo> listeTODO;
 
@@ -30,20 +38,12 @@ public class todoDAO {
     {
         super();
         this.accesseurBaseDeDonnees = BaseDeDonnees.getInstance();
-        Log.d("DAO", "instance bdd : " + this.accesseurBaseDeDonnees);
+        //Log.d("DAO", "instance bdd : " + this.accesseurBaseDeDonnees);
         listeTODO = new ArrayList<todo>();
-
-        /*todo todo;
-        todo = new todo(1, "Regarder une video", "Demain", "8h", "Le Java", "www.youtube.com");
-        listeTODO.add(todo);
-        todo = new todo(2, "Faire la lessive", "Aujourd'hui", "16h", "Laver son linge", "N/A");
-        listeTODO.add(todo);
-        todo = new todo(3, "Lire un livre", "Demain", "12h", "Maria Chapdelaine", "N/A");
-        listeTODO.add(todo);
-        todo = new todo(4, "Aller à la fête", "Aujourd'hui", "21h", "Party de Nico", "N/A");
-        listeTODO.add(todo);
-        todo = new todo(5, "Test Titre 5", "Test date de realisation 5", "Test Heure", "Test Description", "Test URL");
-        listeTODO.add(todo);*/
+    }
+    public void getApplicationTODOContext(Context cont)
+    {
+        context = cont;
     }
     public void ajouterTODO(todo todo)
     {
@@ -54,14 +54,17 @@ public class todoDAO {
                 "'" + todo.getDescription() + "', " +
                 "'" + todo.getUrl() + "', '0')";
 
-        Log.d("INSERT", INSERT_DATA);
+        //Log.d("INSERT", INSERT_DATA);
         accesseurBaseDeDonnees.getWritableDatabase().execSQL(INSERT_DATA);
+
+        ajouterAlarm(todo.getTitre());
     }
+
     public void todoTermine(String id)
     {
         String TODO_FINI = "UPDATE todo SET fini = '1' WHERE id_todo = '" + id + "'";
         accesseurBaseDeDonnees.getWritableDatabase().execSQL(TODO_FINI);
-        Log.d("TODO FINI", TODO_FINI);
+        //Log.d("TODO FINI", TODO_FINI);
     }
     public void modifierTODO(todo todo){
 
@@ -74,16 +77,126 @@ public class todoDAO {
                         "', description = '" + todo.getDescription() +
                         "', url = '" + todo.getUrl() +
                         "' WHERE " + todo.getId() + " = id_todo";
-                Log.d("UPDATE", UPDATE_TODO);
+                //Log.d("UPDATE", UPDATE_TODO);
 
                 accesseurBaseDeDonnees.getWritableDatabase().execSQL(UPDATE_TODO);
+                modifierAlarm(todo.getId());
 
-                /*TODOTeste.setUrl(todo.getUrl());
-                TODOTeste.setDescription(todo.getDescription());
-                TODOTeste.setHeure(todo.getHeure());
-                TODOTeste.setDaterealisation(todo.getDaterealisation());
-                TODOTeste.setTitre(todo.getTitre());*/
             }
+        }
+    }
+    public void ajouterAlarm(String titre)
+    {
+        String LISTER_TODO = "SELECT * FROM todo WHERE fini = '0' AND titre = '" + titre + "'";
+        Cursor curseur = accesseurBaseDeDonnees.getReadableDatabase().rawQuery(LISTER_TODO, null);
+
+        int indexId = curseur.getColumnIndex("id_todo");
+        int indexDateRealisation = curseur.getColumnIndex("date_de_realisation");
+        int indexHeure = curseur.getColumnIndex("heure");
+
+        for(curseur.moveToFirst(); !curseur.isAfterLast(); curseur.moveToNext())
+        {
+            String id = curseur.getString(indexId);
+            String jour = curseur.getString(indexDateRealisation).substring(0,2);
+            String mois = curseur.getString(indexDateRealisation).substring(3,5);
+            String annee = curseur.getString(indexDateRealisation).substring(6,10);
+
+            String heure = curseur.getString(indexHeure).substring(0,2);
+            String minute = curseur.getString(indexHeure).substring(3,5);
+
+            //Log.d("DATE", Integer.parseInt(jour) + "   " + Integer.parseInt(mois) + "   " + Integer.parseInt(annee));
+            //Log.d("DATE", Integer.parseInt(heure) + "   " + Integer.parseInt(minute));
+
+            int calculmois = Integer.parseInt(mois) - 1;
+
+            Calendar temps = Calendar.getInstance();
+            temps.setTimeInMillis(System.currentTimeMillis());
+            temps.clear();
+            temps.set(Integer.parseInt(annee),calculmois,Integer.parseInt(jour),Integer.parseInt(heure),Integer.parseInt(minute));
+
+            //Log.d("DATE", temps.toString());
+
+            Intent intentAlarm = new Intent(context, VueAlarme.class);
+            intentAlarm.putExtra("id_todo", id);
+            PendingIntent pending = PendingIntent.getActivity(context,Integer.parseInt(id), intentAlarm, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager alarm = (AlarmManager)context.getSystemService(Activity.ALARM_SERVICE);
+            alarm.set(AlarmManager.RTC_WAKEUP, temps.getTimeInMillis(),pending);
+        }
+    }
+    public void mettreAlarm()
+    {
+        String LISTER_TODO = "SELECT * FROM todo WHERE fini = '0'";
+        Cursor curseur = accesseurBaseDeDonnees.getReadableDatabase().rawQuery(LISTER_TODO, null);
+
+        int indexId = curseur.getColumnIndex("id_todo");
+        int indexDateRealisation = curseur.getColumnIndex("date_de_realisation");
+        int indexHeure = curseur.getColumnIndex("heure");
+
+        for(curseur.moveToFirst(); !curseur.isAfterLast(); curseur.moveToNext())
+        {
+            String id = curseur.getString(indexId);
+            String jour = curseur.getString(indexDateRealisation).substring(0,2);
+            String mois = curseur.getString(indexDateRealisation).substring(3,5);
+            String annee = curseur.getString(indexDateRealisation).substring(6,10);
+
+            String heure = curseur.getString(indexHeure).substring(0,2);
+            String minute = curseur.getString(indexHeure).substring(3,5);
+
+            //Log.d("DATE", Integer.parseInt(jour) + "   " + Integer.parseInt(mois) + "   " + Integer.parseInt(annee));
+            //Log.d("DATE", Integer.parseInt(heure) + "   " + Integer.parseInt(minute));
+
+            int calculmois = Integer.parseInt(mois) - 1;
+
+            Calendar temps = Calendar.getInstance();
+            temps.setTimeInMillis(System.currentTimeMillis());
+            temps.clear();
+            temps.set(Integer.parseInt(annee),calculmois,Integer.parseInt(jour),Integer.parseInt(heure),Integer.parseInt(minute));
+
+            //Log.d("DATE", temps.toString());
+
+            Intent intentAlarm = new Intent(context, VueAlarme.class);
+            intentAlarm.putExtra("id_todo", id);
+            PendingIntent pending = PendingIntent.getActivity(context,Integer.parseInt(id), intentAlarm, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager alarm = (AlarmManager)context.getSystemService(Activity.ALARM_SERVICE);
+            alarm.set(AlarmManager.RTC_WAKEUP, temps.getTimeInMillis(),pending);
+        }
+    }
+    public void modifierAlarm(int id_todo_modif)
+    {
+        String LISTER_TODO = "SELECT * FROM todo WHERE fini = '0' AND id_todo = '" + id_todo_modif + "'";
+        Cursor curseur = accesseurBaseDeDonnees.getReadableDatabase().rawQuery(LISTER_TODO, null);
+
+        int indexId = curseur.getColumnIndex("id_todo");
+        int indexDateRealisation = curseur.getColumnIndex("date_de_realisation");
+        int indexHeure = curseur.getColumnIndex("heure");
+
+        for(curseur.moveToFirst(); !curseur.isAfterLast(); curseur.moveToNext())
+        {
+            String id = curseur.getString(indexId);
+            String jour = curseur.getString(indexDateRealisation).substring(0,2);
+            String mois = curseur.getString(indexDateRealisation).substring(3,5);
+            String annee = curseur.getString(indexDateRealisation).substring(6,10);
+
+            String heure = curseur.getString(indexHeure).substring(0,2);
+            String minute = curseur.getString(indexHeure).substring(3,5);
+
+            //Log.d("DATE", Integer.parseInt(jour) + "   " + Integer.parseInt(mois) + "   " + Integer.parseInt(annee));
+            //Log.d("DATE", Integer.parseInt(heure) + "   " + Integer.parseInt(minute));
+
+            int calculmois = Integer.parseInt(mois) - 1;
+
+            Calendar temps = Calendar.getInstance();
+            temps.setTimeInMillis(System.currentTimeMillis());
+            temps.clear();
+            temps.set(Integer.parseInt(annee),calculmois,Integer.parseInt(jour),Integer.parseInt(heure),Integer.parseInt(minute));
+
+            //Log.d("DATE", temps.toString());
+
+            Intent intentAlarm = new Intent(context, VueAlarme.class);
+            intentAlarm.putExtra("id_todo", id);
+            PendingIntent pending = PendingIntent.getActivity(context,Integer.parseInt(id), intentAlarm, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager alarm = (AlarmManager)context.getSystemService(Activity.ALARM_SERVICE);
+            alarm.set(AlarmManager.RTC_WAKEUP, temps.getTimeInMillis(),pending);
         }
     }
     public todo trouverTODO(int id)
@@ -130,6 +243,7 @@ public class todoDAO {
             todo = new todo(id, titre, datederealisation, heure, description, url);
             this.listeTODO.add(todo);
         }
+        curseur.close();
         return listeTODO;
     }
 

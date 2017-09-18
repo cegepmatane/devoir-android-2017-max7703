@@ -32,8 +32,6 @@ public class BaseDeDonnees extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
-        //String DELETE = "delete from livre where 1 = 1";
-        //db.execSQL(DELETE);
         String CREER_TABLE = "CREATE TABLE todo(id_todo INTEGER PRIMARY KEY, titre TEXT, " +
                 "date_de_realisation TEXT, heure TEXT, description TEXT, url TEXT, fini TINYINT)";
         db.execSQL(CREER_TABLE);
@@ -46,15 +44,15 @@ public class BaseDeDonnees extends SQLiteOpenHelper {
         db.execSQL(DELETE);
 
         String INSERT_1 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
-                "url, fini) VALUES('1','Regarder une video', 'Demain', '8h', 'Le Java', 'www.youtube.com', '0')";
+                "url, fini) VALUES('1','Regarder une video', '30/09/2017', '10:30', 'Le Java', 'www.youtube.com', '0')";
         String INSERT_2 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
-                "url, fini) VALUES('2','Faire la lessive', 'Aujourdhui', '16h', 'Laver son linge', 'N/A', '0')";
+                "url, fini) VALUES('2','Faire la lessive', '20/09/2017', '08:30', 'Laver son linge', 'N/A', '0')";
         String INSERT_3 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
-                "url, fini) VALUES('3','Lire un livre', 'Demain', '12h', 'Maria Chapdelaine', 'N/A', '0')";
+                "url, fini) VALUES('3','Lire un livre', '20/09/2017', '04:30', 'Maria Chapdelaine', 'N/A', '0')";
         String INSERT_4 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
-                "url, fini) VALUES('4','Aller à la fête', 'Aujourdhui', '21h', 'Party de Nico', 'N/A', '0')";
+                "url, fini) VALUES('4','Aller à la fête', '18/09/2017', '18:07', 'Party de Nico', 'N/A', '0')";
         String INSERT_5 = "INSERT INTO todo(id_todo, titre, date_de_realisation, heure, description, " +
-                "url, fini) VALUES('5','Test Titre 5', 'Test date de realisation 5', 'Test Heure', 'Test description', 'Test URL', '0')";
+                "url, fini) VALUES('5','Test Titre 5', '18/09/2017', '18:06', 'Test description', 'Test URL', '0')";
 
         db.execSQL(INSERT_1);
         db.execSQL(INSERT_2);

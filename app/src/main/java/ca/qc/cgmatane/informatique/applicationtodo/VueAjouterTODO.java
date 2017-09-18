@@ -2,13 +2,9 @@ package ca.qc.cgmatane.informatique.applicationtodo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import ca.qc.cgmatane.informatique.applicationtodo.donnees.todoDAO;
 import ca.qc.cgmatane.informatique.applicationtodo.modele.todo;

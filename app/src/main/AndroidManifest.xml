@@ -12,12 +12,13 @@
         <activity android:name=".VueApplicationTODO">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity android:name=".VueModifierTODO"></activity>
-        <activity android:name=".VueAjouterTODO"></activity>
+
+        <activity android:name=".VueModifierTODO" />
+        <activity android:name=".VueAjouterTODO" />
+        <activity android:name=".VueAlarme"></activity>
     </application>
 
 </manifest>

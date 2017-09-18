@@ -21,7 +21,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/champ_titre_modifier_todo"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <EditText
         android:id="@+id/champ_titre_modifier_todo"
@@ -42,8 +42,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="date de realisation"
-        android:inputType="textPersonName"
+        android:hint="date de realisation (JJ/MM/AA)"
+        android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/champ_heure_modifier_todo"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -66,8 +66,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="heure"
-        android:inputType="textPersonName"
+        android:hint="heure (HH:MM)"
+        android:inputType="time"
         app:layout_constraintBottom_toTopOf="@+id/champ_description_modifier_todo"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -99,4 +99,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/champ_heure_modifier_todo" />
+
 </android.support.constraint.ConstraintLayout>
